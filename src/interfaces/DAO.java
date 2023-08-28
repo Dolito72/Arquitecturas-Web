@@ -3,20 +3,24 @@ package interfaces;
 import java.util.List;
 import java.util.Optional;
 
+import entities.Cliente;
+
 public interface DAO<T>{
 	
-	
-	public interface Dao<T> {
+		public   void insert(T t);
 	    
-	    public abstract Optional<T> get(long id);
+	    public T get(long id);
 	    
-	    public abstract List<T> getAll();
+	    public  List getAll();
 	    
-	    public abstract void save(T t);
+	    public  void save(T t);
 	    
-	    public abstract void update(T t, String[] params);
+	    public  void update(T t, String[] params);
 	    
-	    public abstract void delete(T t);
+	    public  void delete(T t);
 	}
 
-}
+	
+
+
+

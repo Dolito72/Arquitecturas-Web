@@ -1,19 +1,28 @@
 package entities;
 
+
+import interfaces.DAO;
 public class Cliente {
-	private int id;
+	private Integer idCliente;
 	private String nombre;
 	private String email;
 	
-	public Cliente(int id, String nombre, String email) {
-		
-		this.id = id;
+	public Cliente() {
+		this.idCliente = idCliente;
+		this.nombre = nombre;
+		this.email = email;
+	}
+	
+	
+	
+	public Cliente(Integer idCliente, String nombre, String email) {
+		this.idCliente = idCliente;
 		this.nombre = nombre;
 		this.email = email;
 	}
 
-	public int getId() {
-		return id;
+	public Integer getIdCliente() {
+		return idCliente;
 	}
 
 	public String getNombre() {
@@ -30,6 +39,12 @@ public class Cliente {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+
+
+	public void setIdCliente(int idCliente) {
+		this.idCliente = idCliente;
 	}
 
 

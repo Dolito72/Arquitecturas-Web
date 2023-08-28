@@ -1,29 +1,26 @@
 package entities;
 
 public class Factura {
-	private int id;
+	private Integer idFactura;
 	private Cliente cliente;
 	
-	public Factura( Cliente idCliente) {
-		this.id = id;
+	public Factura( Integer idFactura, Cliente idCliente) {
+		this.idFactura = idFactura;
 		this.cliente = cliente;
 	}
-	public int getId() {
-		return id;
+	public Integer getIdFactura() {
+		return idFactura;
 	}
 	public void setId(int id) {
-		this.id = id;
+		this.idFactura = id;
 	}
-	public Cliente getIdCliente() {
+	public Cliente getCliente() {
 		return cliente;
 	}
 	public void setIdCliente(Cliente idCliente) {
 		this.cliente = idCliente;
 	}
 	
-	public int idCliente() {
-		return cliente.getId();
-	}
 	
 
 }

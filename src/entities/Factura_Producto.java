@@ -1,18 +1,18 @@
 package entities;
 
 public class Factura_Producto {
-	private int id_factura;
-	private int id_producto;
-	private int cantidad;
+	private Integer id_factura;
+	private Integer id_producto;
+	private Integer cantidad;
 	
-	public Factura_Producto(int id_factura, int id_producto, int cantidad) {
+	public Factura_Producto(Integer id_factura, Integer id_producto, Integer cantidad) {
 		super();
 		this.id_factura = id_factura;
 		this.id_producto = id_producto;
 		this.cantidad = cantidad;
 	}
 
-	public int getId_factura() {
+	public Integer getId_factura() {
 		return id_factura;
 	}
 
@@ -20,7 +20,7 @@ public class Factura_Producto {
 		this.id_factura = id_factura;
 	}
 
-	public int getId_producto() {
+	public Integer getId_producto() {
 		return id_producto;
 	}
 
@@ -28,7 +28,7 @@ public class Factura_Producto {
 		this.id_producto = id_producto;
 	}
 
-	public int getCantidad() {
+	public Integer getCantidad() {
 		return cantidad;
 	}
 

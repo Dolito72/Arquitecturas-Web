@@ -1,17 +1,18 @@
 package entities;
 
 public class Producto {
-	private int id;
+	private Integer idProducto;
 	private String nombre;
-	private float valor;
-	public Producto(int id, String nombre, float valor) {
+	private Float valor;
 	
-		this.id = id;
+	public Producto(Integer id, String nombre, Float valor) {
+	
+		this.idProducto = idProducto;
 		this.nombre = nombre;
 		this.valor = valor;
 	}
-	public int getId() {
-		return id;
+	public Integer getIdProducto() {
+		return idProducto;
 	}
 	
 	public String getNombre() {
@@ -20,7 +21,7 @@ public class Producto {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public float getValor() {
+	public Float getValor() {
 		return valor;
 	}
 	public void setValor(float valor) {

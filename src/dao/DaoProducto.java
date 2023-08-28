@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import entities.Cliente;
 import entities.Producto;
@@ -25,69 +26,57 @@ public class DaoProducto implements DAO<Producto> {
 					"valor FLOAT," +
 					"PRIMARY KEY (idProducto))";
 			conectar.prepareStatement(table).execute();
-			
 			conn.close();
 		}catch(SQLException e) {
 			System.out.println(e);
 		}
 	}
-	public static void insert(Connection conn, int idProducto, String nombre, Float valor) {
-		
-		String insert = "INSERT INTO producto (idCliente, nombre, valor) VALUES (?, ?, ?)";
+	
+	@Override
+	public void insert(Producto p) {
 		try {
-			PreparedStatement ps = conn.prepareStatement(insert);
-			ps.setInt(1, idProducto);
-			ps.setString(2, nombre);
-			ps.setFloat(3, valor);
-			ps.executeUpdate();
-			ps.close();
-			conn.commit();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-				
-		
-		
-	}
-
-	public Producto get(long id) {
-		return null;
-	}
-
-	public List<Producto> getAll() {
-		return null;
-
-	}
-
-	public void save(Producto producto) {
-
-	}
-
-	public void update(Producto producto, String[] params) {
-
-	}
-
-	public void delete(Producto producto) {
-
-	}
-
-	private static void getAll(Connection conn, String producto) {
-		String select = "SELECT * FROM " + producto;
-		try {
-			PreparedStatement ps = conn.prepareStatement(select);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				System.out.println(rs.getInt(1) + ".- " + rs.getString(2) + " " + rs.getString(3));
+			if(p.getIdProducto() == null || p.getNombre() == null || p.getValor() == null) {
+				throw new SQLException ("Debe ingresar un cliente valido, con todos sus atributos");
 			}
+			Connection conectar = conn.connect();
+			PreparedStatement insert = conectar.prepareStatement("INSERT INTO producto (idProducto, nombre, valor) VALUES (?, ?, ?)");
+			
+			insert.setInt(1, p.getIdProducto());
+			insert.setString(2, p.getNombre());
+			insert.setFloat(3, p.getValor());
+			
+			insert.executeUpdate();
 			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}catch(SQLException e) {
+			System.out.println(e);
 		}
+	}
+	
+	@Override
+	public  Producto get(long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void save(Producto t) {
+		// TODO Auto-generated method stub
 		
 	}
-
+	@Override
+	public void update(Producto t, String[] params) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void delete(Producto t) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public List getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	public static void main(String args[]) throws SQLException {
 		DaoProducto producto = new DaoProducto();
@@ -98,7 +87,8 @@ public class DaoProducto implements DAO<Producto> {
 			e.printStackTrace();
 		}
 	}
-
+	
+	
 
 }
 	
