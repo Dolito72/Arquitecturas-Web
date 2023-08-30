@@ -2,6 +2,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import factory.*;
 
 import dao.*;
 
@@ -16,19 +17,26 @@ public class Main {
 	
 
 	public static void main(String[] args) throws SQLException, IOException  {
-		Conexion conn = Conexion.getInstance();
+		//Conexion conn = Conexion.getInstance();
+		Mysql_Factory mysql= new Mysql_Factory();
+		mysql.getInstance();
+		mysql.connect();
+		DaoFactura = mysql.getDaoFactura();
+		DaoCliente = mysql.getDaoCliente();
+		DaoProducto = mysql.getDaoProducto();
+		DaoFacturaProducto = mysql.getDaoFacturaProducto();
 		 CSVParser datosFacturas = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/facturas.csv"));
 		 CSVParser datosFacturasProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/facturas-productos.csv"));
 		 CSVParser datosProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/productos.csv"));
 		 CSVParser datosClientes = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/clientes.csv"));
 	
-		 DaoCliente.insert(datosClientes);
-		 DaoFactura.insert(datosFacturas);
-		 DaoProducto.insert(datosProductos);
-		 DaoFacturaProducto.insert(datosFacturasProductos);
+		// DaoCliente.insert(datosClientes);
+		// DaoFactura.insert(datosFacturas);
+		// DaoProducto.insert(datosProductos);
+	//	 DaoFacturaProducto.insert(datosFacturasProductos);
 		 
 		 System.out.println(DaoFactura.productoConMasRecaudacion());
-		 System.out.println(DaoCliente.getAll());
+		 System.out.println(DaoCliente.mejoresClientes());
 		 
 	
 	}

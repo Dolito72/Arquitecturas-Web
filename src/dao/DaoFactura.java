@@ -26,15 +26,9 @@ static Conexion conn = Conexion.getInstance();
 	private static void createTable() {
 		try {
 			Connection conectar = conn.connect();
-<<<<<<< HEAD
 			String table = "CREATE TABLE IF NOT EXISTS factura(" + 
 					"idFactura INT," +
 					"idCliente INT," +
-=======
-			String table = "CREATE TABLE factura(" + 
-					"idFactura INT NOT NULL AUTO_INCREMENT," +
-					"idCliente INT, " +
->>>>>>> e7c680545ad6114f13fbc25e26fd2e1c2c671c11
 					"PRIMARY KEY (idFactura)," + 
 					"FOREIGN KEY(idCliente)REFERENCES cliente(idCliente))";
 			conectar.prepareStatement(table).execute();

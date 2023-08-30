@@ -12,7 +12,7 @@ import dao.DaoFacturaProducto;
 import dao.DaoProducto;
 import interfaces.DAO;
 
-public class MySQLDAOFactory extends AbstractFactory {
+public class Mysql_Factory extends AbstractFactory {
 	//guardamos  el estado de la conexion
 			private static Connection conexion;
 		//variable para crear una sola instancia
@@ -57,6 +57,29 @@ public class MySQLDAOFactory extends AbstractFactory {
 				}
 			}
 			
+			@Override
+			public DaoFactura getDaoFactura() throws SQLException {
+				// TODO Auto-generated method stub
+				return new DaoFactura();
+			}
+			@Override
+			public DaoCliente getDaoCliente() throws SQLException {
+				// TODO Auto-generated method stub
+				return new DaoCliente();
+			}
+			@Override
+			public DaoFacturaProducto getDaoFacturaProducto() throws SQLException {
+				// TODO Auto-generated method stub
+				return new DaoFacturaProducto();
+			}
+			@Override
+			public DaoProducto getDaoProducto() throws SQLException {
+				// TODO Auto-generated method stub
+				return new DaoProducto();
+			}
+			
+			
+			
 			//patron singleton
 			public static Conexion getInstance() {
 				if(instancia == null) {
@@ -68,16 +91,9 @@ public class MySQLDAOFactory extends AbstractFactory {
 				Conexion conn = new Conexion();
 				conn.connect();
 			}
-	//		@Override
-		//	public DAO getDAO() {
-				// TODO Auto-generated method stub
-		//		return new MySQLDAO;
-//			}
-			@Override
-			public DAO getDAO() {
-				// TODO Auto-generated method stub
-				return null;
-			}
+	
+			
+			
 
 
 

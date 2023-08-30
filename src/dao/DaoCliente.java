@@ -60,6 +60,27 @@ public class DaoCliente implements DAO<Cliente> {
 	}
 	
 	
+	public ArrayList<Cliente> mejoresClientes() throws SQLException{
+		Connection conectar = conn.connect();
+		ArrayList<Cliente> clientes = new ArrayList<>();
+		String select = "SELECT c.*, SUM(p.valor * fp.cantidad) as mejores_clientes FROM cliente c JOIN factura f ON c.idCliente = f.idCliente JOIN factura_producto fp ON fp.idFactura = f.idFactura JOIN producto p ON p.idProducto = fp.idProducto WHERE c.idCliente = f.idCliente GROUP BY c.idCliente ORDER BY mejores_clientes DESC;   ";
+		PreparedStatement ps = conectar.prepareStatement(select);
+		ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Integer idCliente = rs.getInt(1);
+				String nombre = rs.getString(2);
+				String mail = rs.getString(3);
+				Cliente c = new Cliente();
+				c.setIdCliente(idCliente);
+				c.setNombre(nombre);
+				c.setEmail(mail);
+				clientes.add(c);
+			}
+			this.conn.close();
+	
+		return clientes;
+}
+
 	@Override
 	public Cliente get(long id) {
 		Cliente cliente = new Cliente();
@@ -67,7 +88,6 @@ public class DaoCliente implements DAO<Cliente> {
 			
 			Connection conectar = conn.connect();
 			PreparedStatement get = conectar.prepareStatement("SELECT * FROM cliente WHERE idCliente = ?");
-			
 			get.setLong(1, id);
 			ResultSet consulta = get.executeQuery();
 			
@@ -158,8 +178,9 @@ public class DaoCliente implements DAO<Cliente> {
 		CSVParser datosClientes = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/clientes.csv"));
 		
 		try {
-			cliente.createTable();
-			cliente.insert(datosClientes);
+			//cliente.createTable();
+			//cliente.insert(datosClientes);
+			System.out.println (cliente.mejoresClientes());
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block
