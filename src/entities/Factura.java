@@ -2,23 +2,35 @@ package entities;
 
 public class Factura {
 	private Integer idFactura;
-	private Cliente cliente;
+	private Integer idCliente;
 	
-	public Factura( Integer idFactura, Cliente idCliente) {
+	public Factura( Integer idFactura,Integer idCliente) {
 		this.idFactura = idFactura;
-		this.cliente = cliente;
+		this.idCliente = idCliente;
 	}
+	
+	public Factura( ) {
+		this.idFactura = idFactura;
+		this.idCliente = idCliente;
+	}
+	
+	
 	public Integer getIdFactura() {
 		return idFactura;
 	}
 	public void setId(int id) {
 		this.idFactura = id;
 	}
-	public Cliente getCliente() {
-		return cliente;
+	public Integer getidCliente() {
+		return idCliente;
 	}
-	public void setIdCliente(Cliente idCliente) {
-		this.cliente = idCliente;
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
+
+	@Override
+	public String toString() {
+		return "Factura [idFactura=" + idFactura + ", idCliente=" + idCliente + "]";
 	}
 	
 	

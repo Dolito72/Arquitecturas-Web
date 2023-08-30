@@ -2,6 +2,10 @@ package dao;
 
 import interfaces.DAO;
 import entities.Cliente;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,46 +16,48 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+
+
 
 public class DaoCliente implements DAO<Cliente> {
 	static Conexion conn = Conexion.getInstance();
 	
-	private static void createTable() {
-		try {
-
-			Connection conectar = conn.connect();
-			String table = "CREATE TABLE cliente(" + 
-					"idCliente INT NOT NULL AUTO_INCREMENT," +
+	private static void createTable() throws SQLException {
+		Connection conectar = conn.connect();
+			String table = "CREATE TABLE IF NOT EXISTS  cliente(" + 
+					"idCliente INT," +
 					"nombre VARCHAR(500)," +
 					"email VARCHAR(150)," +
 					"PRIMARY KEY (idCliente))";
 			conectar.prepareStatement(table).execute();
-			
 			conn.close();
-		}catch(SQLException e) {
-			System.out.println(e);
-		}
 	}
 	
 	@Override
-	public void insert(Cliente c) {
-			try {
-				if(c.getEmail() == null || c.getNombre() == null || c.getIdCliente() == null) {
-					throw new SQLException ("Debe ingresar un cliente valido, con todos sus atributos");
-				}
+	public void insert(CSVParser datosT) throws SQLException {
+			//try {
+				//if(c.getEmail() == null || c.getNombre() == null || c.getIdCliente() == null) {
+			////		throw new SQLException ("Debe ingresar un cliente valido, con todos sus atributos");
+			//	}
 				Connection conectar = conn.connect();
-				PreparedStatement insert = conectar.prepareStatement("INSERT INTO cliente (idCliente, nombre, email) VALUES (?, ?, ?)");
-				
-				insert.setInt(1, c.getIdCliente());
-				insert.setString(2, c.getNombre());
-				insert.setString(3, c.getEmail());
-				
-				insert.executeUpdate();
-				conn.close();
-			}catch(SQLException e) {
-				System.out.println(e);
-			}
-		}
+				for (CSVRecord row : datosT) {
+					int idCliente = Integer.parseInt(row.get("idCliente"));
+					String nombre = row.get("nombre");
+					String email = row.get("email");
+					String insert = "INSERT INTO cliente  (idCliente, nombre, email) VALUES(?, ?, ?)  ";
+					PreparedStatement ps = conectar.prepareStatement(insert);
+					ps.setInt(1, idCliente);
+					ps.setString(2, nombre);
+					ps.setString(3, email);
+					ps.executeUpdate();
+					//conectar.commit();
+					ps.close();
+				}
+				this.conn.close();
+	}
 	
 	
 	@Override
@@ -132,8 +138,6 @@ public class DaoCliente implements DAO<Cliente> {
 			System.out.println(e);
 		}
 		
-		
-		
 	}
 
 	@Override
@@ -149,16 +153,21 @@ public class DaoCliente implements DAO<Cliente> {
 		}	
 	}
 		
-	public static void main (String args[]) throws SQLException {
+	public static void main (String args[]) throws SQLException, FileNotFoundException, IOException {
 		DaoCliente cliente = new DaoCliente();
+		CSVParser datosClientes = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/clientes.csv"));
+		
 		try {
 			cliente.createTable();
+			cliente.insert(datosClientes);
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
+	
 	
 
 }

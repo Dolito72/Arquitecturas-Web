@@ -1,13 +1,16 @@
 package interfaces;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.commons.csv.CSVParser;
 
 import entities.Cliente;
 
 public interface DAO<T>{
 	
-		public   void insert(T t);
+		public   void insert(CSVParser datosT) throws SQLException ;
 	    
 	    public T get(long id);
 	    

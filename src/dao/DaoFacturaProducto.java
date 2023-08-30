@@ -3,41 +3,30 @@ package dao;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import entities.Cliente;
-import entities.Producto;
 import interfaces.DAO;
+import entities.Factura_Producto;
 
-public class DaoProducto implements DAO<Producto> {
-	static Conexion conn = Conexion.getInstance();
+public class DaoFacturaProducto implements DAO<Factura_Producto> {
+static Conexion conn = Conexion.getInstance();
 	
-	static void createTable() {
-		try {
+private static void createTable() throws SQLException {
+	Connection conectar = conn.connect();
+	String table = "CREATE TABLE IF NOT EXISTS factura_producto(" + "idFactura INT," + "idProducto INT,"
+			+ "cantidad INT," + "FOREIGN KEY(idFactura)REFERENCES factura(idFactura),"
+			+ "FOREIGN KEY(idProducto)REFERENCES producto(idProducto))";
 
-			Connection conectar = conn.connect();
-			String table = "CREATE TABLE producto(" + 
-					"idProducto INT," +
-					"nombre VARCHAR(45)," +
-					"valor FLOAT," +
-					"PRIMARY KEY (idProducto))";
-			conectar.prepareStatement(table).execute();
-			conn.close();
-		}catch(SQLException e) {
-			System.out.println(e);
-		}
-	}
+	conectar.prepareStatement(table).execute();
+	conn.close();
+}
 	
 	@Override
 	public void insert(CSVParser datosT) throws SQLException {
@@ -47,14 +36,14 @@ public class DaoProducto implements DAO<Producto> {
 			//	}
 				Connection conectar = conn.connect();
 				for (CSVRecord row : datosT) {
+					int idFactura = Integer.parseInt(row.get("idFactura"));
 					int idProducto = Integer.parseInt(row.get("idProducto"));
-					String nombre = row.get("nombre");
-					Float valor = Float.parseFloat(row.get("valor"));
-					String insert = "INSERT INTO producto (idProducto, nombre, valor) VALUES(?, ?, ?)";
+					int cantidad = Integer.parseInt(row.get("cantidad"));
+					String insert = "INSERT INTO factura_producto (idFactura, idProducto, cantidad) VALUES(?, ?, ?)  ";
 					PreparedStatement ps = conectar.prepareStatement(insert);
-					ps.setInt(1, idProducto);
-					ps.setString(2, nombre);
-					ps.setFloat(3, valor);
+					ps.setInt(1, idFactura);
+					ps.setInt(2, idProducto);
+					ps.setInt(3, cantidad);
 					ps.executeUpdate();
 					ps.close();
 				}
@@ -62,42 +51,45 @@ public class DaoProducto implements DAO<Producto> {
 	}
 	
 	@Override
-	public  Producto get(long id) {
+	public Factura_Producto get(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
-	public void save(Producto t) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void update(Producto t, String[] params) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void delete(Producto t) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	public List getAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void save(Factura_Producto t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Factura_Producto t, String[] params) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Factura_Producto t) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	public static void main(String args[]) throws SQLException, FileNotFoundException, IOException {
-		DaoProducto producto = new DaoProducto();
-		 CSVParser datosProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/productos.csv"));
+		DaoFacturaProducto factura_producto = new DaoFacturaProducto();
+		 CSVParser datosFacturasProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/facturas-productos.csv"));
 		try {
-			producto.createTable();
-			producto.insert(datosProductos);
+			factura_producto.createTable();
+			factura_producto.insert(datosFacturasProductos);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-}
-	
 
+}

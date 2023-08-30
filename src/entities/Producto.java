@@ -5,7 +5,7 @@ public class Producto {
 	private String nombre;
 	private Float valor;
 	
-	public Producto(Integer id, String nombre, Float valor) {
+	public Producto(Integer idProducto, String nombre, Float valor) {
 	
 		this.idProducto = idProducto;
 		this.nombre = nombre;
@@ -13,6 +13,10 @@ public class Producto {
 	}
 	public Integer getIdProducto() {
 		return idProducto;
+	}
+	
+	public void setIdProducto(Integer idProducto) {
+		this.idProducto = idProducto;
 	}
 	
 	public String getNombre() {
@@ -26,6 +30,10 @@ public class Producto {
 	}
 	public void setValor(float valor) {
 		this.valor = valor;
+	}
+	@Override
+	public String toString() {
+		return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", valor=" + valor + "]";
 	}
 	
 	
