@@ -17,7 +17,7 @@ static Conexion conn = Conexion.getInstance();
 			Connection conectar = conn.connect();
 			String table = "CREATE TABLE factura(" + 
 					"idFactura INT NOT NULL AUTO_INCREMENT," +
-					"idCliente INT" +
+					"idCliente INT, " +
 					"PRIMARY KEY (idFactura)," + 
 					"FOREIGN KEY(idCliente)REFERENCES cliente(idCliente))";
 					conectar.prepareStatement(table).execute();
