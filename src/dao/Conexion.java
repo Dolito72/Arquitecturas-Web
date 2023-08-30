@@ -11,7 +11,11 @@ public class Conexion {
 	//variable para crear una sola instancia
 		private static Conexion instancia;
 	//variables para conectarse a  la bd
+<<<<<<< HEAD
 		private static final String URL = "jdbc:mysql://localhost:3306/dao";
+=======
+		private static final String URL = "jdbc:mysql://localhost:34306/prueba";
+>>>>>>> e7c680545ad6114f13fbc25e26fd2e1c2c671c11
 		private static final String USERNAME = "root";
 		private static final String PASSWORD = "";
 		//constructor privado para que no puedan hacer un new
