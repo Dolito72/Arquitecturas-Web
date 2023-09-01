@@ -14,17 +14,23 @@ import org.apache.commons.csv.CSVRecord;
 
 import interfaces.DAO;
 import entities.Factura_Producto;
+import factory.MysqlDAOFactory;
 
 public class DaoFacturaProducto implements DAO<Factura_Producto> {
-static Conexion conn = Conexion.getInstance();
+	private Connection conn;
+	public DaoFacturaProducto(Connection conn){
+		this.conn = conn;
+	}
+
 	
-private static void createTable() throws SQLException {
-	Connection conectar = conn.connect();
+public void createTable() throws SQLException {
+	MysqlDAOFactory.getInstance().connect();
+	//Connection conectar = conn.connect();
 	String table = "CREATE TABLE IF NOT EXISTS factura_producto(" + "idFactura INT," + "idProducto INT,"
 			+ "cantidad INT," + "FOREIGN KEY(idFactura)REFERENCES factura(idFactura),"
 			+ "FOREIGN KEY(idProducto)REFERENCES producto(idProducto))";
 
-	conectar.prepareStatement(table).execute();
+	conn.prepareStatement(table).execute();
 	conn.close();
 }
 	
@@ -34,13 +40,14 @@ private static void createTable() throws SQLException {
 				//if(c.getEmail() == null || c.getNombre() == null || c.getIdCliente() == null) {
 			////		throw new SQLException ("Debe ingresar un cliente valido, con todos sus atributos");
 			//	}
-				Connection conectar = conn.connect();
+				MysqlDAOFactory.getInstance().connect();
+				//Connection conectar = conn.connect();
 				for (CSVRecord row : datosT) {
 					int idFactura = Integer.parseInt(row.get("idFactura"));
 					int idProducto = Integer.parseInt(row.get("idProducto"));
 					int cantidad = Integer.parseInt(row.get("cantidad"));
 					String insert = "INSERT INTO factura_producto (idFactura, idProducto, cantidad) VALUES(?, ?, ?)  ";
-					PreparedStatement ps = conectar.prepareStatement(insert);
+					PreparedStatement ps = conn.prepareStatement(insert);
 					ps.setInt(1, idFactura);
 					ps.setInt(2, idProducto);
 					ps.setInt(3, cantidad);
@@ -80,7 +87,7 @@ private static void createTable() throws SQLException {
 		
 	}
 	
-	public static void main(String args[]) throws SQLException, FileNotFoundException, IOException {
+	/**public static void main(String args[]) throws SQLException, FileNotFoundException, IOException {
 		DaoFacturaProducto factura_producto = new DaoFacturaProducto();
 		 CSVParser datosFacturasProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/facturas-productos.csv"));
 		try {
@@ -91,5 +98,6 @@ private static void createTable() throws SQLException {
 			e.printStackTrace();
 		}
 	}
+	*/
 
 }

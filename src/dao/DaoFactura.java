@@ -16,22 +16,26 @@ import org.apache.commons.csv.CSVRecord;
 
 import entities.Factura;
 import entities.Producto;
+import factory.MysqlDAOFactory;
 import interfaces.DAO;
 
 public class DaoFactura implements DAO<Factura>{
-static Conexion conn = Conexion.getInstance();
+	private Connection conn;
+	public DaoFactura(Connection conn){
+		this.conn = conn;
+	}
 	
 
 	
-	private static void createTable() {
+	public void createTable() {
 		try {
-			Connection conectar = conn.connect();
+			MysqlDAOFactory.getInstance().connect();
 			String table = "CREATE TABLE IF NOT EXISTS factura(" + 
 					"idFactura INT," +
 					"idCliente INT," +
 					"PRIMARY KEY (idFactura)," + 
 					"FOREIGN KEY(idCliente)REFERENCES cliente(idCliente))";
-			conectar.prepareStatement(table).execute();
+			conn.prepareStatement(table).execute();
 			
 			conn.close();
 		}catch(SQLException e) {
@@ -45,12 +49,12 @@ static Conexion conn = Conexion.getInstance();
 				//if(c.getEmail() == null || c.getNombre() == null || c.getIdCliente() == null) {
 			////		throw new SQLException ("Debe ingresar un cliente valido, con todos sus atributos");
 			//	}
-				Connection conectar = conn.connect();
+		MysqlDAOFactory.getInstance().connect();
 				for (CSVRecord row : datosT) {
 					int idFactura = Integer.parseInt(row.get("idFactura"));
 					int idCliente = Integer.parseInt(row.get("idCliente"));
 					String insert = "INSERT INTO factura (idFactura, idCliente) VALUES( ?, ?)  ";
-					PreparedStatement ps = conectar.prepareStatement(insert);
+					PreparedStatement ps = this.conn.prepareStatement(insert);
 					ps.setInt(1, idFactura);
 					ps.setInt(2, idCliente);
 					ps.executeUpdate();
@@ -62,7 +66,8 @@ static Conexion conn = Conexion.getInstance();
 	public Producto productoConMasRecaudacion() {
 		Producto producto = new Producto(null, null, null);
 		try {
-			Connection conectar = conn.connect();
+			Connection conectar = MysqlDAOFactory.getInstance().connect();
+		
 			String select =
 "SELECT p.idProducto, p.nombre, p.valor, SUM(fp.cantidad * p.valor) AS total_recaudado FROM producto p JOIN factura_producto fp ON p.idProducto = fp.idProducto GROUP BY p.idProducto, p.valor ORDER BY total_recaudado DESC LIMIT 1";
 				PreparedStatement ps = conectar.prepareStatement(select);
@@ -75,7 +80,7 @@ static Conexion conn = Conexion.getInstance();
 					producto.setNombre(nombre);
 					producto.setValor(valor);
 				}
-			this.conn.close();
+				MysqlDAOFactory.getInstance().close();
 			}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -116,7 +121,7 @@ static Conexion conn = Conexion.getInstance();
 
 	
 	
-	public static void main(String args[]) throws SQLException, FileNotFoundException, IOException {
+	/*public static void main(String args[]) throws SQLException, FileNotFoundException, IOException {
 		DaoFactura factura = new DaoFactura();
 		 CSVParser datosFacturas = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/facturas.csv"));
 		try {
@@ -129,4 +134,5 @@ static Conexion conn = Conexion.getInstance();
 			e.printStackTrace();
 		}
 	}
+	*/
 }

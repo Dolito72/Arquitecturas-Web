@@ -2,6 +2,7 @@ package dao;
 
 import interfaces.DAO;
 import entities.Cliente;
+import factory.MysqlDAOFactory;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -20,19 +21,25 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import dto.DtoCliente;
+
 
 
 public class DaoCliente implements DAO<Cliente> {
-	static Conexion conn = Conexion.getInstance();
-	
-	private static void createTable() throws SQLException {
-		Connection conectar = conn.connect();
+	private Connection conn;
+	public DaoCliente(Connection conn){
+		this.conn = conn;
+	}
+
+
+	public  void createTable() throws SQLException {
+		MysqlDAOFactory.getInstance().connect();
 			String table = "CREATE TABLE IF NOT EXISTS  cliente(" + 
 					"idCliente INT," +
 					"nombre VARCHAR(500)," +
 					"email VARCHAR(150)," +
 					"PRIMARY KEY (idCliente))";
-			conectar.prepareStatement(table).execute();
+			conn.prepareStatement(table).execute();
 			conn.close();
 	}
 	
@@ -42,13 +49,13 @@ public class DaoCliente implements DAO<Cliente> {
 				//if(c.getEmail() == null || c.getNombre() == null || c.getIdCliente() == null) {
 			////		throw new SQLException ("Debe ingresar un cliente valido, con todos sus atributos");
 			//	}
-				Connection conectar = conn.connect();
-				for (CSVRecord row : datosT) {
+			MysqlDAOFactory.getInstance().connect();
+			for (CSVRecord row : datosT) {
 					int idCliente = Integer.parseInt(row.get("idCliente"));
 					String nombre = row.get("nombre");
 					String email = row.get("email");
 					String insert = "INSERT INTO cliente  (idCliente, nombre, email) VALUES(?, ?, ?)  ";
-					PreparedStatement ps = conectar.prepareStatement(insert);
+					PreparedStatement ps = conn.prepareStatement(insert);
 					ps.setInt(1, idCliente);
 					ps.setString(2, nombre);
 					ps.setString(3, email);
@@ -60,34 +67,32 @@ public class DaoCliente implements DAO<Cliente> {
 	}
 	
 	
-	public ArrayList<Cliente> mejoresClientes() throws SQLException{
-		Connection conectar = conn.connect();
-		ArrayList<Cliente> clientes = new ArrayList<>();
+	public ArrayList<DtoCliente> mejoresClientes() throws SQLException{
+		Connection conectar = MysqlDAOFactory.getInstance().connect();
+		//Connection conectar = conn.connect();
+		ArrayList<DtoCliente> clientes = new ArrayList<>();
 		String select = "SELECT c.*, SUM(p.valor * fp.cantidad) as mejores_clientes FROM cliente c JOIN factura f ON c.idCliente = f.idCliente JOIN factura_producto fp ON fp.idFactura = f.idFactura JOIN producto p ON p.idProducto = fp.idProducto WHERE c.idCliente = f.idCliente GROUP BY c.idCliente ORDER BY mejores_clientes DESC;   ";
 		PreparedStatement ps = conectar.prepareStatement(select);
 		ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				Integer idCliente = rs.getInt(1);
 				String nombre = rs.getString(2);
-				String mail = rs.getString(3);
-				Cliente c = new Cliente();
-				c.setIdCliente(idCliente);
-				c.setNombre(nombre);
-				c.setEmail(mail);
+				//String mail = rs.getString(3);
+				Integer suma = rs.getInt(4);
+				DtoCliente c = new DtoCliente(idCliente, nombre, suma);
 				clientes.add(c);
 			}
-			this.conn.close();
-	
-		return clientes;
-}
+			MysqlDAOFactory.getInstance().close();
+			return clientes;
+	}
 
 	@Override
 	public Cliente get(long id) {
 		Cliente cliente = new Cliente();
 		try {
-			
-			Connection conectar = conn.connect();
-			PreparedStatement get = conectar.prepareStatement("SELECT * FROM cliente WHERE idCliente = ?");
+			MysqlDAOFactory.getInstance().connect();
+			//Connection conectar = conn.connect();
+			PreparedStatement get = conn.prepareStatement("SELECT * FROM cliente WHERE idCliente = ?");
 			get.setLong(1, id);
 			ResultSet consulta = get.executeQuery();
 			
@@ -112,9 +117,9 @@ public class DaoCliente implements DAO<Cliente> {
 	public List getAll() {
 		List<Cliente> clientes = null;
 		try {
-			
-			Connection conectar = conn.connect();
-			PreparedStatement getAll = conectar.prepareStatement("SELECT * FROM cliente");
+			MysqlDAOFactory.getInstance().connect();
+			//Connection conectar = conn.connect();
+			PreparedStatement getAll = conn.prepareStatement("SELECT * FROM cliente");
 			ResultSet consulta = getAll.executeQuery();
 			Cliente c = null;
 			clientes = new ArrayList<>();
@@ -145,8 +150,9 @@ public class DaoCliente implements DAO<Cliente> {
 	@Override
 	public void update(Cliente c, String[] params) {
 		try {
-			Connection conectar = conn.connect();
-			PreparedStatement update = conectar.prepareStatement("UPDATE cliente SET nombre = ?, email = ? WHERE idCliente = ?");
+			MysqlDAOFactory.getInstance().connect();
+			//Connection conectar = conn.connect();
+			PreparedStatement update = conn.prepareStatement("UPDATE cliente SET nombre = ?, email = ? WHERE idCliente = ?");
 			
 			update.setString(1, c.getNombre());
 			update.setString(2, c.getEmail());
@@ -163,8 +169,9 @@ public class DaoCliente implements DAO<Cliente> {
 	@Override
 	public void delete(Cliente c) {
 		try {
-			Connection conectar = conn.connect();
-			PreparedStatement delete = conectar.prepareStatement("DELETE FROM cliente WHERE idCliente = ?");
+			MysqlDAOFactory.getInstance().connect();
+			//Connection conectar = conn.connect();
+			PreparedStatement delete = conn.prepareStatement("DELETE FROM cliente WHERE idCliente = ?");
 			delete.setInt(1, c.getIdCliente());
 			delete.executeUpdate();
 			conn.close();
@@ -172,8 +179,10 @@ public class DaoCliente implements DAO<Cliente> {
 			System.out.println(e);
 		}	
 	}
+	
+}
 		
-	public static void main (String args[]) throws SQLException, FileNotFoundException, IOException {
+	/**public static void main (String args[]) throws SQLException, FileNotFoundException, IOException {
 		DaoCliente cliente = new DaoCliente();
 		CSVParser datosClientes = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/clientes.csv"));
 		
@@ -189,8 +198,8 @@ public class DaoCliente implements DAO<Cliente> {
 	}
 
 	
-	
+	*/
 
-}
+
 	
 

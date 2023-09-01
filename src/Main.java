@@ -17,14 +17,12 @@ public class Main {
 	
 
 	public static void main(String[] args) throws SQLException, IOException  {
-		//Conexion conn = Conexion.getInstance();
-		Mysql_Factory mysql= new Mysql_Factory();
-		mysql.getInstance();
-		mysql.connect();
+		
+		MysqlDAOFactory mysql= MysqlDAOFactory.getInstance();
 		DaoFactura = mysql.getDaoFactura();
 		DaoCliente = mysql.getDaoCliente();
-		DaoProducto = mysql.getDaoProducto();
-		DaoFacturaProducto = mysql.getDaoFacturaProducto();
+		DaoFactura = mysql.getDaoFactura();
+		DaoCliente = mysql.getDaoCliente();
 		 CSVParser datosFacturas = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/facturas.csv"));
 		 CSVParser datosFacturasProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/facturas-productos.csv"));
 		 CSVParser datosProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/productos.csv"));

@@ -51,7 +51,7 @@ public class Cliente {
 
 	@Override
 	public String toString() {
-		return "Cliente [idCliente=" + idCliente + ", nombre=" + nombre + ", email=" + email + "]";
+		return "Cliente idCliente = " + idCliente + ", nombre = " + nombre + ", email = " + email + " \n";
 	}
 
 

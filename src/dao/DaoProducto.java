@@ -18,21 +18,25 @@ import org.apache.commons.csv.CSVRecord;
 
 import entities.Cliente;
 import entities.Producto;
+import factory.MysqlDAOFactory;
 import interfaces.DAO;
 
 public class DaoProducto implements DAO<Producto> {
-	static Conexion conn = Conexion.getInstance();
+	private Connection conn;
+	public DaoProducto(Connection conn){
+		this.conn = conn;
+	}
 	
-	static void createTable() {
+	public void createTable() {
 		try {
-
-			Connection conectar = conn.connect();
-			String table = "CREATE TABLE producto(" + 
+			MysqlDAOFactory.getInstance().connect();
+			//Connection conectar = conn.connect();
+			String table = "CREATE TABLE IF NOT EXISTS producto(" + 
 					"idProducto INT," +
 					"nombre VARCHAR(45)," +
 					"valor FLOAT," +
 					"PRIMARY KEY (idProducto))";
-			conectar.prepareStatement(table).execute();
+			conn.prepareStatement(table).execute();
 			conn.close();
 		}catch(SQLException e) {
 			System.out.println(e);
@@ -45,7 +49,8 @@ public class DaoProducto implements DAO<Producto> {
 				//if(c.getEmail() == null || c.getNombre() == null || c.getIdCliente() == null) {
 			////		throw new SQLException ("Debe ingresar un cliente valido, con todos sus atributos");
 			//	}
-				Connection conectar = conn.connect();
+				Connection conectar = MysqlDAOFactory.getInstance().connect();
+				//Connection conectar = conn.connect();
 				for (CSVRecord row : datosT) {
 					int idProducto = Integer.parseInt(row.get("idProducto"));
 					String nombre = row.get("nombre");
@@ -58,7 +63,7 @@ public class DaoProducto implements DAO<Producto> {
 					ps.executeUpdate();
 					ps.close();
 				}
-				this.conn.close();
+				conectar.close();
 	}
 	
 	@Override
@@ -86,8 +91,9 @@ public class DaoProducto implements DAO<Producto> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+}
 	
-	public static void main(String args[]) throws SQLException, FileNotFoundException, IOException {
+/*	public static void main(String args[]) throws SQLException, FileNotFoundException, IOException {
 		DaoProducto producto = new DaoProducto();
 		 CSVParser datosProductos = CSVFormat.DEFAULT.withHeader().parse(new FileReader("./src/dataset/productos.csv"));
 		try {
@@ -101,3 +107,4 @@ public class DaoProducto implements DAO<Producto> {
 }
 	
 
+*/

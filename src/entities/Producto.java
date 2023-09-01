@@ -33,7 +33,7 @@ public class Producto {
 	}
 	@Override
 	public String toString() {
-		return "Producto [idProducto=" + idProducto + ", nombre=" + nombre + ", valor=" + valor + "]";
+		return "Producto idProducto = " + idProducto + ", nombre = " + nombre + ", valor = " + valor + "";
 	}
 	
 	
