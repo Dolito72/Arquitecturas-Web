@@ -21,27 +21,22 @@ public class MysqlDAOFactory extends AbstractFactory {
 		private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 	
 		private MysqlDAOFactory () {
-			
 		}
 			
 			@Override
 			public DaoFactura getDaoFactura() throws SQLException {
-				// TODO Auto-generated method stub
 				return new DaoFactura(conn);
 			}
 			@Override
 			public DaoCliente getDaoCliente() throws SQLException {
-				// TODO Auto-generated method stub
 				return new DaoCliente(conn);
 			}
 			@Override
 			public DaoFacturaProducto getDaoFacturaProducto() throws SQLException {
-				// TODO Auto-generated method stub
 				return new DaoFacturaProducto(conn);
 			}
 			@Override
 			public DaoProducto getDaoProducto() throws SQLException {
-				// TODO Auto-generated method stub
 				return new DaoProducto(conn);
 			}
 			

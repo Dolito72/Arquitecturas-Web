@@ -17,7 +17,6 @@ public class Main {
 	
 
 	public static void main(String[] args) throws SQLException, IOException  {
-		
 		MysqlDAOFactory mysql= MysqlDAOFactory.getInstance();
 		DaoFactura = mysql.getDaoFactura();
 		DaoCliente = mysql.getDaoCliente();
@@ -31,7 +30,7 @@ public class Main {
 		// DaoCliente.insert(datosClientes);
 		// DaoFactura.insert(datosFacturas);
 		// DaoProducto.insert(datosProductos);
-	//	 DaoFacturaProducto.insert(datosFacturasProductos);
+		// DaoFacturaProducto.insert(datosFacturasProductos);
 		 
 		 System.out.println(DaoFactura.productoConMasRecaudacion());
 		 System.out.println(DaoCliente.mejoresClientes());
