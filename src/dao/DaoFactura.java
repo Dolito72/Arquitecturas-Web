@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import dto.DtoProducto;
 import entities.Factura;
 import entities.Producto;
 import factory.MysqlDAOFactory;
@@ -37,8 +38,8 @@ public class DaoFactura implements DAO<Factura> {
 		MysqlDAOFactory.getInstance().close();
 	}
 
-	public Producto productoConMasRecaudacion() {
-		Producto producto = new Producto(null, null, null);
+	public DtoProducto productoConMasRecaudacion() {
+		DtoProducto producto = null;
 		try {
 			Connection conectar = MysqlDAOFactory.getInstance().connect();
 
@@ -48,10 +49,8 @@ public class DaoFactura implements DAO<Factura> {
 			while (rs.next()) {
 				Integer id = rs.getInt(1);
 				String nombre = rs.getString(2);
-				Float valor = rs.getFloat(3);
-				producto.setIdProducto(id);
-				producto.setNombre(nombre);
-				producto.setValor(valor);
+				Integer valor = rs.getInt(4);
+				producto = new DtoProducto(id, nombre, valor);
 			}
 			MysqlDAOFactory.getInstance().close();
 		} catch (Exception e) {

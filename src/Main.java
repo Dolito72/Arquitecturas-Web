@@ -7,6 +7,7 @@ import factory.*;
 import utils.Helper;
 import dao.*;
 import dto.DtoCliente;
+import dto.DtoProducto;
 import entities.Producto;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -40,10 +41,10 @@ public class Main {
 		DaoCliente = mysql.getDaoCliente();
 		
 		
-		Producto p = DaoFactura.productoConMasRecaudacion();
+		DtoProducto p = DaoFactura.productoConMasRecaudacion();
 		System.out.println("---------- Producto con mas recaudacion ----------\n");
 		System.out.println("Id Producto\t Nombre \t\t Valor");
-		System.out.println("   "+p.getIdProducto() +"\t \t " +p.getNombre() +"\t\t $" + p.getValor());
+		System.out.println("   "+p.getIdProducto() +"\t \t " +p.getName() +"\t\t $" + p.getTotalFacturacion());
 		
 		
 		ArrayList<DtoCliente> dt = DaoCliente.mejoresClientes();
