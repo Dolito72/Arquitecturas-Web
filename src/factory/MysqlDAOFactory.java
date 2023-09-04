@@ -51,12 +51,11 @@ public class MysqlDAOFactory extends AbstractFactory {
 		
 		//abrir conexion
 	public Connection connect() throws SQLException {
-
 		try {
 			
 			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
 			conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-			System.out.println("conexion exitosa");
+			
 			return conn;
 			
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
@@ -73,7 +72,7 @@ public class MysqlDAOFactory extends AbstractFactory {
 	public void close() throws SQLException {
 		try {
 			conn.close();
-			System.out.println("cerro conexion");
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 			conn.close();

@@ -29,7 +29,7 @@ public class Main {
 		
 		
 		Helper helper = new Helper();
-		helper.createTables();
+		//helper.createTables();
 		//helper.fillTables(datosFacturas, datosFacturasProductos, datosProductos, datosClientes);
 
 		MysqlDAOFactory mysql= MysqlDAOFactory.getInstance();
@@ -42,14 +42,14 @@ public class Main {
 		
 		
 		DtoProducto p = DaoFactura.productoConMasRecaudacion();
-		System.out.println("---------- Producto con mas recaudacion ----------\n");
+		System.out.println("---------- Producto con mas recaudacion ----------");
 		System.out.println("Id Producto\t Nombre \t\t Valor");
 		System.out.println("   "+p.getIdProducto() +"\t \t " +p.getName() +"\t\t $" + p.getTotalFacturacion());
 		
 		
 		ArrayList<DtoCliente> dt = DaoCliente.mejoresClientes();
-		System.out.println("---------- Listado Clientes segun facturacion ----------\n");
-		System.out.println("Facturacion\t Id Cliente\t    Nombre\n");
+		System.out.println("\n ---------- Listado Clientes segun facturacion ----------");
+		System.out.println("Facturacion\t Id Cliente\t    Nombre");
 		for(DtoCliente e:dt) {
 			System.out.println(" $" + e.getFacturacion() +"\t\t     " + e.getIdCliente() +"\t\t    " +e.getName());
 		}

@@ -74,7 +74,6 @@ public class DaoFactura implements DAO<Factura> {
 	@Override
 	public void delete(Factura t) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
