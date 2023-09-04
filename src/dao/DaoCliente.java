@@ -23,11 +23,10 @@ import org.apache.commons.csv.CSVRecord;
 
 import dto.DtoCliente;
 
-
-
 public class DaoCliente implements DAO<Cliente> {
 	private Connection conn;
-	public DaoCliente(Connection conn){
+
+	public DaoCliente(Connection conn) {
 		this.conn = conn;
 	}
 
@@ -56,45 +55,38 @@ public class DaoCliente implements DAO<Cliente> {
 				
 	}
 	
-	
-	public ArrayList<DtoCliente> mejoresClientes() throws SQLException{
+	public ArrayList<DtoCliente> mejoresClientes() throws SQLException {
 		Connection conectar = MysqlDAOFactory.getInstance().connect();
-		//Connection conectar = conn.connect();
 		ArrayList<DtoCliente> clientes = new ArrayList<>();
 		String select = "SELECT c.*, SUM(p.valor * fp.cantidad) as mejores_clientes FROM cliente c JOIN factura f ON c.idCliente = f.idCliente JOIN factura_producto fp ON fp.idFactura = f.idFactura JOIN producto p ON p.idProducto = fp.idProducto WHERE c.idCliente = f.idCliente GROUP BY c.idCliente ORDER BY mejores_clientes DESC;   ";
 		PreparedStatement ps = conectar.prepareStatement(select);
 		ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Integer idCliente = rs.getInt(1);
-				String nombre = rs.getString(2);
-				//String mail = rs.getString(3);
-				Integer suma = rs.getInt(4);
-				DtoCliente c = new DtoCliente(idCliente, nombre, suma);
-				clientes.add(c);
-			}
-			MysqlDAOFactory.getInstance().close();
-			return clientes;
+		while (rs.next()) {
+			Integer idCliente = rs.getInt(1);
+			String nombre = rs.getString(2);
+			Integer suma = rs.getInt(4);
+			DtoCliente c = new DtoCliente(idCliente, nombre, suma);
+			clientes.add(c);
+		}
+		MysqlDAOFactory.getInstance().close();
+		return clientes;
 	}
 
 	@Override
 	public Cliente get(long id) {
 		Cliente cliente = new Cliente();
 		try {
-			MysqlDAOFactory.getInstance().connect();
-			PreparedStatement get = conn.prepareStatement("SELECT * FROM cliente WHERE idCliente = ?");
+			Connection conectar = MysqlDAOFactory.getInstance().connect();
+			PreparedStatement get = conectar.prepareStatement("SELECT * FROM cliente WHERE idCliente = ?");
 			get.setLong(1, id);
 			ResultSet consulta = get.executeQuery();
-			
-			if(consulta.next()) {
-				
+			if (consulta.next()) {
 				cliente.setIdCliente(Integer.parseInt(consulta.getString("idCliente")));
 				cliente.setNombre(consulta.getString("nombre"));
 				cliente.setEmail(consulta.getString("email"));
 			} else {
 				throw new SQLException("no existe ese id");
-				
 			}
-			
 			MysqlDAOFactory.getInstance().close();
 		}catch(SQLException e) {
 			System.out.println(e);
@@ -120,8 +112,7 @@ public class DaoCliente implements DAO<Cliente> {
 				clientes.add(c);
 			} 
 			MysqlDAOFactory.getInstance().close();
-			return clientes;
-		}catch(SQLException e) {
+		} catch (SQLException e) {
 			System.out.println(e);
 		}
 		return clientes;
@@ -131,34 +122,34 @@ public class DaoCliente implements DAO<Cliente> {
 	@Override
 	public void update(Cliente c, String[] params) {
 		try {
-			MysqlDAOFactory.getInstance().connect();
-			PreparedStatement update = conn.prepareStatement("UPDATE cliente SET nombre = ?, email = ? WHERE idCliente = ?");
+			Connection conectar = MysqlDAOFactory.getInstance().connect();
+			PreparedStatement update = conectar.prepareStatement("UPDATE cliente SET nombre = ?, email = ? WHERE idCliente = ?");
 			update.setString(1, c.getNombre());
 			update.setString(2, c.getEmail());
 			update.setInt(3, c.getIdCliente());
+
 			update.executeUpdate();
 			MysqlDAOFactory.getInstance().close();
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			System.out.println(e);
 		}
-		
+
 	}
 
 	@Override
 	public void delete(Cliente c) {
 		try {
-			MysqlDAOFactory.getInstance().connect();
-			PreparedStatement delete = conn.prepareStatement("DELETE FROM cliente WHERE idCliente = ?");
+			Connection conectar = MysqlDAOFactory.getInstance().connect();
+			PreparedStatement delete = conectar.prepareStatement("DELETE FROM cliente WHERE idCliente = ?");
 			delete.setInt(1, c.getIdCliente());
 			delete.executeUpdate();
 			MysqlDAOFactory.getInstance().close();
-		}catch(SQLException e) {
+
+		} catch (SQLException e) {
 			System.out.println(e);
-		}	
+		}
 	}
+
 }
-		
-
-
-	
 

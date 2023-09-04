@@ -1,18 +1,21 @@
 package dao;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
 import entities.Factura;
 import entities.Producto;
 import factory.MysqlDAOFactory;
 import interfaces.DAO;
 
-public class DaoFactura implements DAO<Factura>{
+public class DaoFactura implements DAO<Factura> {
 	private Connection conn;
-	public DaoFactura(Connection conn){
+
+	public DaoFactura(Connection conn) {
 		this.conn = conn;
 	}
 	
@@ -33,27 +36,25 @@ public class DaoFactura implements DAO<Factura>{
 		ps.close();
 		MysqlDAOFactory.getInstance().close();
 	}
-	
+
 	public Producto productoConMasRecaudacion() {
 		Producto producto = new Producto(null, null, null);
 		try {
 			Connection conectar = MysqlDAOFactory.getInstance().connect();
-		
-			String select =
-"SELECT p.idProducto, p.nombre, p.valor, SUM(fp.cantidad * p.valor) AS total_recaudado FROM producto p JOIN factura_producto fp ON p.idProducto = fp.idProducto GROUP BY p.idProducto, p.valor ORDER BY total_recaudado DESC LIMIT 1";
-				PreparedStatement ps = conectar.prepareStatement(select);
-				ResultSet rs = ps.executeQuery();
-				while (rs.next()) {
-					Integer id = rs.getInt(1);
-					String nombre = rs.getString(2);
-					Float valor = rs.getFloat(3);
-					producto.setIdProducto(id);
-					producto.setNombre(nombre);
-					producto.setValor(valor);
-				}
-				MysqlDAOFactory.getInstance().close();
+
+			String select = "SELECT p.idProducto, p.nombre, p.valor, SUM(fp.cantidad * p.valor) AS total_recaudado FROM producto p JOIN factura_producto fp ON p.idProducto = fp.idProducto GROUP BY p.idProducto, p.valor ORDER BY total_recaudado DESC LIMIT 1";
+			PreparedStatement ps = conectar.prepareStatement(select);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Integer id = rs.getInt(1);
+				String nombre = rs.getString(2);
+				Float valor = rs.getFloat(3);
+				producto.setIdProducto(id);
+				producto.setNombre(nombre);
+				producto.setValor(valor);
 			}
-		catch (Exception e) {
+			MysqlDAOFactory.getInstance().close();
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -71,13 +72,11 @@ public class DaoFactura implements DAO<Factura>{
 		// TODO Auto-generated method stub
 	}
 
-
 	@Override
 	public void delete(Factura t) {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public List getAll() {

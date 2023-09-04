@@ -30,6 +30,7 @@ public class Main {
 		Helper helper = new Helper();
 		helper.createTables();
 		//helper.fillTables(datosFacturas, datosFacturasProductos, datosProductos, datosClientes);
+
 		MysqlDAOFactory mysql= MysqlDAOFactory.getInstance();
 		
 		

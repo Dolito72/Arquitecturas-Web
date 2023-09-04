@@ -18,11 +18,12 @@ import factory.MysqlDAOFactory;
 
 public class DaoFacturaProducto implements DAO<Factura_Producto> {
 	private Connection conn;
-	public DaoFacturaProducto(Connection conn){
+
+	public DaoFacturaProducto(Connection conn) {
 		this.conn = conn;
 	}
 
-	
+
 	@Override
 	public void insert(Factura_Producto fp) throws SQLException {
 			
@@ -39,8 +40,8 @@ public class DaoFacturaProducto implements DAO<Factura_Producto> {
 				ps.executeUpdate();
 				ps.close();
 				MysqlDAOFactory.getInstance().close();
-	}
-	
+}
+
 	@Override
 	public Factura_Producto get(long id) {
 		// TODO Auto-generated method stub
@@ -54,14 +55,16 @@ public class DaoFacturaProducto implements DAO<Factura_Producto> {
 	}
 
 	@Override
+
 	public void update(Factura_Producto t, String[] params) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void delete(Factura_Producto t) {
 		// TODO Auto-generated method stub
-		
+
 	}
+
 }

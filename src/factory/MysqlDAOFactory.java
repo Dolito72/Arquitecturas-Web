@@ -24,25 +24,21 @@ public class MysqlDAOFactory extends AbstractFactory {
 	private MysqlDAOFactory () {
 		
 	}
-	
+
 	@Override
 	public DaoFactura getDaoFactura() throws SQLException {
-		// TODO Auto-generated method stub
 		return new DaoFactura(conn);
 	}
 	@Override
 	public DaoCliente getDaoCliente() throws SQLException {
-		// TODO Auto-generated method stub
 		return new DaoCliente(conn);
 	}
 	@Override
 	public DaoFacturaProducto getDaoFacturaProducto() throws SQLException {
-		// TODO Auto-generated method stub
 		return new DaoFacturaProducto(conn);
 	}
 	@Override
 	public DaoProducto getDaoProducto() throws SQLException {
-		// TODO Auto-generated method stub
 		return new DaoProducto(conn);
 	}
 	
@@ -52,9 +48,10 @@ public class MysqlDAOFactory extends AbstractFactory {
 		}
 		return instancia;
 	}
-	
-	//abrir conexion
+		
+		//abrir conexion
 	public Connection connect() throws SQLException {
+
 		try {
 			
 			Class.forName(DRIVER).getDeclaredConstructor().newInstance();
@@ -69,7 +66,9 @@ public class MysqlDAOFactory extends AbstractFactory {
 			System.exit(1);
 		}
 		return conn;
-	}
+		
+	} 
+	
 	//cerrar conexion
 	public void close() throws SQLException {
 		try {
