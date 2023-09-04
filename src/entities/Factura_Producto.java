@@ -6,7 +6,6 @@ public class Factura_Producto {
 	private Integer cantidad;
 	
 	public Factura_Producto(Integer id_factura, Integer id_producto, Integer cantidad) {
-		super();
 		this.id_factura = id_factura;
 		this.id_producto = id_producto;
 		this.cantidad = cantidad;
@@ -41,6 +40,7 @@ public class Factura_Producto {
 		return "Factura_Producto [id_factura=" + id_factura + ", id_producto=" + id_producto + ", cantidad=" + cantidad
 				+ "]";
 	}
+	
 	
 	
 	
